@@ -215,7 +215,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            if (target.matches('.popup')) {
+            if (popup.style.display === 'block') {
                 if (target.classList.contains('popup-close')) {
                     if (window.innerWidth > 768) {
                         popupHide();
@@ -502,14 +502,16 @@ window.addEventListener('DOMContentLoaded', () => {
             const target = event.target;
             namePLaceholders.forEach(item => {
                 if (item === target) {
-                    target.value = target.value.replace(/[^А-яё\s-]*/ig, '');
+                    target.value = target.value.replace(/[^А-яё\s]*/ig, '');
+                    // /[^А-яё\s-]*/ig
                     target.value = target.value.toLowerCase().replace(/^.|\s./g, match => match.toUpperCase());
                 }
             });
 
             messagePLaceholders.forEach(item => {
                 if (item === target) {
-                    target.value = target.value.replace(/[^А-яё\s-]*/ig, '');
+                    target.value = target.value.replace(/[^А-яё\s\d-.!?,:;']*/ig, '');
+                    // /[^А-яё\s-]*/ig
                 }
             });
         };
@@ -531,7 +533,8 @@ window.addEventListener('DOMContentLoaded', () => {
             const telFields = document.querySelectorAll('[type="tel"');
             telFields.forEach(item => {
                 if (item === target) {
-                    target.value = target.value.replace(/[^-()\d]/g, '');
+                    target.value = target.value.replace(/[^+\d]/g, '');
+                    // /[^-()\d]/g - working solution
                     // /\D[^-()]/g
                 }
             });
@@ -624,4 +627,66 @@ window.addEventListener('DOMContentLoaded', () => {
 
     calculator(100);
 
+    //send ajax form
+    const sendForm = formId => {
+        const errorMessage = 'Something went wrong';
+        const loadMessage = 'Loading...';
+        const successMessage = 'Thank you! We will contact you soon!';
+        const statusMessage = document.createElement('div');
+        const inputs = formId.querySelectorAll('input');
+        statusMessage.style.cssText = `font-size: 2rem;
+        color: green;`;
+
+        formId.addEventListener('submit', event => {
+            event.preventDefault();
+            inputs.forEach(item => {
+                item.value = '';
+            });
+            formId.append(statusMessage);
+            statusMessage.textContent = loadMessage;
+            const formData = new FormData(formId);
+            const body = {};
+            // for (const val of formData.entries()) {
+            //     body[val[0]] = val[1];
+            // }
+            formData.forEach((val, key) => {
+                body[key] = val;
+            });
+            postData(body,
+                () => {
+                    statusMessage.textContent = successMessage;
+                }, error => {
+                    statusMessage.textContent = errorMessage;
+                    console.error(error);
+                });
+        });
+
+        const postData = (body, outputData, errorData) => {
+            const request = new XMLHttpRequest();
+
+            request.addEventListener('readystatechange', () => {
+                if (request.readyState !== 4) {
+                    return;
+                }
+
+                if (request.status === 200) {
+                    outputData();
+                } else {
+                    errorData(request.status);
+                }
+            });
+
+            request.open('POST', './server.php');
+            // request.setRequestHeader('Content-Type', 'multipart/form-data');
+            request.setRequestHeader('Content-Type', 'application/json');
+
+
+            // request.send(formData);
+            request.send(JSON.stringify(body));
+        };
+    };
+    //accessing id elements without getElementById
+    sendForm(form1);
+    sendForm(form3);
+    sendForm(form2);
 });
