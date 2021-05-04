@@ -265,7 +265,8 @@ window.addEventListener('DOMContentLoaded', () => {
                 e.preventDefault();
                 // для каждого якоря берем соответствующий ему элемент и определяем его координату Y
                 // eslint-disable-next-line max-len
-                const coordY = document.querySelector(item.getAttribute('href')).getBoundingClientRect().top + window.pageYOffset;
+                const coordY = document.querySelector(item.getAttribute('href'))
+                    .getBoundingClientRect().top + window.pageYOffset;
                 console.log('coordY: ', coordY);
                 // item.getAttribute('href') это конкретный полный атрибут ссылки, напр #service-block
                 // getBoundingClientRect().top координаты оносительно окна
@@ -637,11 +638,21 @@ window.addEventListener('DOMContentLoaded', () => {
         statusMessage.style.cssText = `font-size: 2rem;
         color: green;`;
 
-        formId.addEventListener('submit', event => {
-            event.preventDefault();
+        const showSuccess = () => {
+            statusMessage.textContent = successMessage;
             inputs.forEach(item => {
                 item.value = '';
             });
+        };
+
+        const showError = error => {
+            statusMessage.textContent = errorMessage;
+            console.error(error);
+        };
+
+        formId.addEventListener('submit', event => {
+            event.preventDefault();
+
             formId.append(statusMessage);
             statusMessage.textContent = loadMessage;
             const formData = new FormData(formId);
@@ -652,38 +663,35 @@ window.addEventListener('DOMContentLoaded', () => {
             formData.forEach((val, key) => {
                 body[key] = val;
             });
-            postData(body,
-                () => {
-                    statusMessage.textContent = successMessage;
-                }, error => {
-                    statusMessage.textContent = errorMessage;
-                    console.error(error);
-                });
+
+            postData(body)
+                .then(showSuccess)
+                .catch(showError);
         });
 
-        const postData = (body, outputData, errorData) => {
+        const postData = body => new Promise((resolve, reject) => {
             const request = new XMLHttpRequest();
 
             request.addEventListener('readystatechange', () => {
                 if (request.readyState !== 4) {
                     return;
                 }
-
                 if (request.status === 200) {
-                    outputData();
+                    resolve();
                 } else {
-                    errorData(request.status);
+                    reject();
                 }
             });
 
             request.open('POST', './server.php');
             // request.setRequestHeader('Content-Type', 'multipart/form-data');
             request.setRequestHeader('Content-Type', 'application/json');
-
-
             // request.send(formData);
             request.send(JSON.stringify(body));
-        };
+        });
+
+
+
     };
     //accessing id elements without getElementById
     sendForm(form1);
