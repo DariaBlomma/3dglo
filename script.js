@@ -496,6 +496,18 @@ window.addEventListener('DOMContentLoaded', () => {
             }
         };
 
+        const markInvalid = elem => {
+            elem.style.border = '1px solid red';
+            setTimeout(() => {
+                elem.style.border = '';
+            }, 3000);
+        };
+        const markValid = elem => {
+            elem.style.border = '1px solid green';
+            setTimeout(() => {
+                elem.style.border = '';
+            }, 3000);
+        };
         const rusText = event => {
             const namePLaceholders = document.querySelectorAll('[placeholder="Ваше имя"');
             const messagePLaceholders = document.querySelectorAll('[placeholder="Ваше сообщение"');
@@ -503,7 +515,19 @@ window.addEventListener('DOMContentLoaded', () => {
             const target = event.target;
             namePLaceholders.forEach(item => {
                 if (item === target) {
-                    target.value = target.value.replace(/[^А-яё\s]*/ig, '');
+                    const reg = /^[А-яё\s-]{2,50}$/i;
+                    const test = reg.test(target.value);
+                    // const match = target.value.match(reg);
+                    // console.log('match: ', match);
+                    // console.log(target.value.length);
+                    // console.log('test: ', test);
+                    if (!test) {
+                        target.value = '';
+                        markInvalid(target);
+                    } else {
+                        markValid(target);
+                    }
+                    // target.value = target.value.replace(/[^А-яё\s-]{2,50}/ig, '');
                     // /[^А-яё\s-]*/ig
                     target.value = target.value.toLowerCase().replace(/^.|\s./g, match => match.toUpperCase());
                 }
@@ -522,7 +546,15 @@ window.addEventListener('DOMContentLoaded', () => {
             const emailFields = document.querySelectorAll('[type="email"]');
             emailFields.forEach(item => {
                 if (item === target) {
-                    target.value = target.value.replace(/[^a-z-@_.!~*']/ig, '');
+                    const reg = /[a-z-@_.!~*']+@\w+\.\w{2,3}/g;
+                    const test = reg.test(target.value);
+                    if (!test) {
+                        target.value = '';
+                        markInvalid(target);
+                    } else {
+                        markValid(target);
+                    }
+                    //target.value = target.value.replace(/[^a-z-@_.!~*']/ig, '');
                     // [^A-z][^@-_\.!~\*']
                     // /[^A-z]+[^@\-\_\.\!\~\*\']*/ig
                 }
@@ -534,7 +566,15 @@ window.addEventListener('DOMContentLoaded', () => {
             const telFields = document.querySelectorAll('[type="tel"');
             telFields.forEach(item => {
                 if (item === target) {
-                    target.value = target.value.replace(/[^+\d]/g, '');
+                    const reg = /^[+\d]{11,12}$/g;
+                    const test = reg.test(target.value);
+                    if (!test) {
+                        target.value = '';
+                        markInvalid(target);
+                    } else {
+                        markValid(target);
+                    }
+                    //target.value = target.value.replace(/[^+\d]/g, '');
                     // /[^-()\d]/g - working solution
                     // /\D[^-()]/g
                 }
@@ -543,9 +583,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
         const calcBlock = document.querySelector('.calc-block');
         calcBlock.addEventListener('input', numbers);
-        document.addEventListener('input', rusText);
-        document.addEventListener('input', email);
-        document.addEventListener('input', phone);
+        //document.addEventListener('input', rusText);
+        // document.addEventListener('input', email);
+        document.addEventListener('blur', email, true);
+        document.addEventListener('blur', rusText, true);
+        // document.addEventListener('input', phone);
+        document.addEventListener('blur', phone, true);
         document.addEventListener('blur', event => {
             const target = event.target;
             target.value = target.value.replace(/-+/g, '-');
@@ -631,12 +674,15 @@ window.addEventListener('DOMContentLoaded', () => {
     //send ajax form
     const sendForm = formId => {
         const errorMessage = 'Something went wrong';
-        const loadMessage = 'Loading...';
+        // const loadMessage = 'Loading...';
         const successMessage = 'Thank you! We will contact you soon!';
         const statusMessage = document.createElement('div');
         const inputs = formId.querySelectorAll('input');
         // statusMessage.style.cssText = `font-size: 2rem;color: green;`;
         // statusMessage.className = 'statusMessage';
+        const removeMessage = () => {
+            statusMessage.remove();
+        };
 
         const showSuccess = () => {
             statusMessage.className = '';
@@ -645,6 +691,7 @@ window.addEventListener('DOMContentLoaded', () => {
             inputs.forEach(item => {
                 item.value = '';
             });
+            setTimeout(removeMessage, 5000);
         };
 
         const showError = error => {
@@ -652,6 +699,7 @@ window.addEventListener('DOMContentLoaded', () => {
             statusMessage.style.cssText = `font-size: 2rem;color: white;`;
             statusMessage.textContent = errorMessage;
             console.error(error);
+            setTimeout(removeMessage, 5000);
         };
 
         formId.addEventListener('submit', event => {
