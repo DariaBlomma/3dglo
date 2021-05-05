@@ -718,33 +718,22 @@ window.addEventListener('DOMContentLoaded', () => {
             });
 
             postData(body)
-                .then(showSuccess)
+                .then(response => {
+                    if (response.status !== 200) {
+                        throw new Error('network status is not 200');
+                    }
+                    showSuccess();
+                })
                 .catch(showError);
         });
 
-        const postData = body => new Promise((resolve, reject) => {
-            const request = new XMLHttpRequest();
-
-            request.addEventListener('readystatechange', () => {
-                if (request.readyState !== 4) {
-                    return;
-                }
-                if (request.status === 200) {
-                    resolve();
-                } else {
-                    reject();
-                }
-            });
-
-            request.open('POST', './server.php');
-            // request.setRequestHeader('Content-Type', 'multipart/form-data');
-            request.setRequestHeader('Content-Type', 'application/json');
-            // request.send(formData);
-            request.send(JSON.stringify(body));
+        const postData = body =>  fetch('./server.php', {
+            method: 'POST',
+            header: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
         });
-
-
-
     };
     //accessing id elements without getElementById
     sendForm(form1);
