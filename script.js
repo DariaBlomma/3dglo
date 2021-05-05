@@ -635,10 +635,12 @@ window.addEventListener('DOMContentLoaded', () => {
         const successMessage = 'Thank you! We will contact you soon!';
         const statusMessage = document.createElement('div');
         const inputs = formId.querySelectorAll('input');
-        statusMessage.style.cssText = `font-size: 2rem;
-        color: green;`;
+        // statusMessage.style.cssText = `font-size: 2rem;color: green;`;
+        // statusMessage.className = 'statusMessage';
 
         const showSuccess = () => {
+            statusMessage.className = '';
+            statusMessage.style.cssText = `font-size: 2rem;color: white;`;
             statusMessage.textContent = successMessage;
             inputs.forEach(item => {
                 item.value = '';
@@ -646,6 +648,8 @@ window.addEventListener('DOMContentLoaded', () => {
         };
 
         const showError = error => {
+            statusMessage.className = '';
+            statusMessage.style.cssText = `font-size: 2rem;color: white;`;
             statusMessage.textContent = errorMessage;
             console.error(error);
         };
@@ -654,7 +658,8 @@ window.addEventListener('DOMContentLoaded', () => {
             event.preventDefault();
 
             formId.append(statusMessage);
-            statusMessage.textContent = loadMessage;
+            statusMessage.className = 'statusMessage';
+            // statusMessage.textContent = loadMessage;
             const formData = new FormData(formId);
             const body = {};
             // for (const val of formData.entries()) {
