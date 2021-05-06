@@ -11,8 +11,10 @@ const calculator = (price = 100) => {
         let total = 0,
             countValue = 1,
             dayValue = 1;
+        let diff;
         const typeValue = calcType.options[calcType.selectedIndex].value,
             squareValue = +calcSquare.value;
+
         if (calcCount.value > 1) {
             countValue += (calcCount.value - 1) / 10;
         }
@@ -28,16 +30,47 @@ const calculator = (price = 100) => {
 
         // totalValue.textContent = total;
         console.log('total: ', total);
-
         const calcAnimate = () => {
             calcInterval = requestAnimationFrame(calcAnimate);
-            numCount += 10;
+            numCount += 100;
             if (numCount <= total) {
+                diff = total - numCount;
+                console.log(' diff: ',  diff);
+                console.log('numCount: ', numCount);
+                if (total > 1000) {
+                    numCount += 1000;
+                }
+                if (diff < 100 || diff < 1000) {
+                    console.log('diff < 1000: ', diff < 1000);
+                    console.log('diff < 100: ', diff < 100);
+                    numCount += diff;
+                    console.log('numCount + diff: ', numCount);
+                }
                 totalValue.textContent = numCount;
             } else if (totalValue.textContent > total) {
                 numCount = totalValue.textContent;
-                numCount -= 10;
+                console.log(' numCount in value < total: ',  numCount);
+                diff = total - numCount;
+
+                numCount -= 100;
+                // if (total > 1000) {
+                //     numCount -= 1000;
+                // }
+                // if (diff < 100) {
+                //     // console.log('diff < 1000: ', diff < 1000);
+                //     console.log('diff < 100: ', diff < 100);
+                //     numCount += diff;
+                //     console.log('numCount + diff: ', numCount);
+                // }
+                // numCount -= 100;
                 totalValue.textContent = numCount;
+            } else if (typeValue === '') {
+                numCount = 0;
+                totalValue.textContent = numCount;
+                cancelAnimationFrame(calcInterval);
+                calcSquare.value = '';
+                calcCount.value = '';
+                calcDay.value = '';
             } else {
                 cancelAnimationFrame(calcInterval);
                 numCount = total;
@@ -48,15 +81,6 @@ const calculator = (price = 100) => {
     };
     calcBlock.addEventListener('change', event => {
         const target = event.target;
-        // if (target.matches('.calc-count') || target.matches('.calc-square') ||
-        //  target.matches('.calc-day') || target.matches('.calc-type')) {
-        //      console.log('works');
-        //  }
-
-        // if (target === calcType || target === calcSquare ||
-        // target === calcDay || target === calcCount) {
-        //     console.log('works');
-        // }
         if (target.matches('select') || target.matches('input')) {
             countSum();
         }
