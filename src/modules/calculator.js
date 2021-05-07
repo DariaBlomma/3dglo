@@ -33,49 +33,41 @@ const calculator = (price = 100) => {
         const calcAnimate = () => {
             calcInterval = requestAnimationFrame(calcAnimate);
             numCount += 100;
-            if (numCount <= total) {
-                diff = total - numCount;
-                console.log(' diff: ',  diff);
-                console.log('numCount: ', numCount);
-                if (total > 1000) {
-                    numCount += 1000;
-                }
-                if (diff < 100 || diff < 1000) {
-                    console.log('diff < 1000: ', diff < 1000);
-                    console.log('diff < 100: ', diff < 100);
-                    numCount += diff;
-                    console.log('numCount + diff: ', numCount);
-                }
-                totalValue.textContent = numCount;
-            } else if (totalValue.textContent > total) {
-                numCount = totalValue.textContent;
-                console.log(' numCount in value < total: ',  numCount);
-                diff = total - numCount;
+            if (totalValue.textContent !== total) {
+                if (typeValue === '') {
+                    cancelAnimationFrame(calcInterval);
+                    numCount = total;
+                    totalValue.textContent = 0;
+                    calcSquare.value = '';
+                    calcCount.value = '';
+                    calcDay.value = '';
+                } else if (numCount <= total) {
+                    if (total > 1000) {
+                        numCount += 1000;
+                    }
+                    numCount += 100;
+                    diff = total - numCount;
+                    if (diff < 100 || diff < 1000) {
+                        numCount += diff;
+                    }
+                    totalValue.textContent = numCount;
+                } else if (totalValue.textContent > total) {
+                    numCount = totalValue.textContent;
+                    diff = numCount - total;
+                    if (diff > 1000) {
+                        numCount -= 1000;
+                    }
+                    numCount -= 100;
 
-                numCount -= 100;
-                // if (total > 1000) {
-                //     numCount -= 1000;
-                // }
-                // if (diff < 100) {
-                //     // console.log('diff < 1000: ', diff < 1000);
-                //     console.log('diff < 100: ', diff < 100);
-                //     numCount += diff;
-                //     console.log('numCount + diff: ', numCount);
-                // }
-                // numCount -= 100;
-                totalValue.textContent = numCount;
-            } else if (typeValue === '') {
-                numCount = 0;
-                totalValue.textContent = numCount;
-                cancelAnimationFrame(calcInterval);
-                calcSquare.value = '';
-                calcCount.value = '';
-                calcDay.value = '';
-            } else {
-                cancelAnimationFrame(calcInterval);
-                numCount = total;
+                    if (diff < 100) {
+                        numCount -= diff;
+                    }
+                    totalValue.textContent = numCount;
+                } else {
+                    cancelAnimationFrame(calcInterval);
+                    numCount = total;
+                }
             }
-
         };
         calcInterval = requestAnimationFrame(calcAnimate);
     };
