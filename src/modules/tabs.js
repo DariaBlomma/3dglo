@@ -17,17 +17,6 @@ const tabs = () => {
 
     tabHeader.addEventListener('click', event => {
         let target = event.target;
-        // while (target !== tabHeader) {
-        //     if (target.classList.contains('service-header-tab')) {
-        //         tab.forEach((item, i) => {
-        //             if (item === target) {
-        //                 toggleTabContent(i);
-        //             }
-        //         });
-        //         return;
-        //     }
-        //     target = target.parentNode;
-        // }
         target = target.closest('.service-header-tab');
         if (target) {
             tab.forEach((item, i) => {

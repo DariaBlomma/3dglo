@@ -5,7 +5,7 @@ const togglePopUp = () => {
     let count = 0;
     const popupShow = () => {
         popupIntervalShow = requestAnimationFrame(popupShow);
-        count += 0.01;
+        count += 0.03;
         if (count < 1) {
             popup.style.display = 'block';
             popup.style.opacity = `${count}`;
@@ -18,7 +18,7 @@ const togglePopUp = () => {
     let countHide = 1;
     const popupHide = () => {
         popupIntervalHide = requestAnimationFrame(popupHide);
-        countHide -= 0.01;
+        countHide -= 0.03;
         if (countHide > 0) {
             popup.style.opacity = `${countHide}`;
         } else {
@@ -27,30 +27,7 @@ const togglePopUp = () => {
             countHide = 1;
         }
     };
-    // popupBtns.forEach(item => {
-    //     item.addEventListener('click', () => {
-    //         popup.style.display = 'block';
-    //     });
-    // });
-    // popupClose.addEventListener('click', () => {
-    //     popup.style.display = 'none';
-    // });
-    // popupBtns.forEach(item => {
-    //     item.addEventListener('click', popupShow);
-    // });
 
-    // popup.addEventListener('click', event => {
-    //     let target = event.target;
-    //     if (target.classList.contains('popup-close')) {
-    //         popupHide();
-    //     } else {
-    //         target = target.closest('.popup-content');
-    //         if (!target) {
-    //             popupHide();
-    //         }
-    //     }
-
-    // });
     const popupHandler = () => {
         if (popup.style.display === '' ||  popup.style.display === 'none') {
             popup.style.opacity = 1;

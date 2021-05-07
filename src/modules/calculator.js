@@ -28,8 +28,6 @@ const calculator = (price = 100) => {
             total = price * typeValue * squareValue * countValue * dayValue;
         }
 
-        // totalValue.textContent = total;
-        console.log('total: ', total);
         const calcAnimate = () => {
             calcInterval = requestAnimationFrame(calcAnimate);
             numCount += 100;

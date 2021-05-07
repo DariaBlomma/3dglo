@@ -8,7 +8,6 @@ const slider = () => {
         ulDots.append(liDot);
     }
 
-    // const btn = document.querySelectorAll('.portfolio-btn'),
     const dots = document.querySelectorAll('.dot'),
         slider = document.querySelector('.portfolio-content');
 

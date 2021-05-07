@@ -26,11 +26,6 @@ const  countTimer = deadline => {
         addZero(timer.minutes, timerMinutes);
         addZero(timer.seconds, timerSeconds);
 
-        // if (timer.timeRemaining > 0) {
-        //     setTimeout(updateClock, 1000);
-        // }
-
-        // const idInterval =  setInterval(updateClock, 1000);
         if (timer.timeRemaining <= 0) {
             // eslint-disable-next-line no-use-before-define
             clearInterval(idInterval);
@@ -40,10 +35,6 @@ const  countTimer = deadline => {
         }
     }
     const idInterval =  setInterval(updateClock, 1000);
-
-    // to get remaining days
-    // hours = Math.floor((timeRemaining / 60 / 60) % 24);
-    // days = Math.floor(timeRemaining / 60 / 60 / 24);
 };
 
 export default countTimer;

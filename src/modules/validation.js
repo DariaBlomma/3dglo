@@ -27,18 +27,12 @@ const validation = () => {
             if (item === target) {
                 const reg = /^[А-яё\s-]{2,50}$/i;
                 const test = reg.test(target.value);
-                // const match = target.value.match(reg);
-                // console.log('match: ', match);
-                // console.log(target.value.length);
-                // console.log('test: ', test);
                 if (!test) {
                     target.value = '';
                     markInvalid(target);
                 } else {
                     markValid(target);
                 }
-                // target.value = target.value.replace(/[^А-яё\s-]{2,50}/ig, '');
-                // /[^А-яё\s-]*/ig
                 target.value = target.value.toLowerCase().replace(/^.|\s./g, match => match.toUpperCase());
             }
         });
@@ -46,7 +40,6 @@ const validation = () => {
         messagePLaceholders.forEach(item => {
             if (item === target) {
                 target.value = target.value.replace(/[^А-яё\s\d-.!?,:;']*/ig, '');
-                // /[^А-яё\s-]*/ig
             }
         });
     };
@@ -64,9 +57,6 @@ const validation = () => {
                 } else {
                     markValid(target);
                 }
-                //target.value = target.value.replace(/[^a-z-@_.!~*']/ig, '');
-                // [^A-z][^@-_\.!~\*']
-                // /[^A-z]+[^@\-\_\.\!\~\*\']*/ig
             }
         });
     };
@@ -84,27 +74,23 @@ const validation = () => {
                 } else {
                     markValid(target);
                 }
-                //target.value = target.value.replace(/[^+\d]/g, '');
-                // /[^-()\d]/g - working solution
-                // /\D[^-()]/g
             }
         });
     };
 
     const calcBlock = document.querySelector('.calc-block');
     calcBlock.addEventListener('input', numbers);
-    //document.addEventListener('input', rusText);
-    // document.addEventListener('input', email);
     document.addEventListener('blur', email, true);
     document.addEventListener('blur', rusText, true);
-    // document.addEventListener('input', phone);
     document.addEventListener('blur', phone, true);
     document.addEventListener('blur', event => {
         const target = event.target;
-        target.value = target.value.replace(/-+/g, '-');
-        target.value = target.value.replace(/\s+/g, ' ');
-        target.value = target.value.replace(/^\s/g, '');
-        target.value = target.value.replace(/\s$/g, '');
+        if (target.matches('input') && !target.matches('.calc-item')) {
+            target.value = target.value.replace(/-+/g, '-');
+            target.value = target.value.replace(/\s+/g, ' ');
+            target.value = target.value.replace(/^\s/g, '');
+            target.value = target.value.replace(/\s$/g, '');
+        }
     }, true);
 
 };

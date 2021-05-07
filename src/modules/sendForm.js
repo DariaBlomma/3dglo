@@ -1,11 +1,8 @@
 const sendForm = formId => {
     const errorMessage = 'Something went wrong';
-    // const loadMessage = 'Loading...';
     const successMessage = 'Thank you! We will contact you soon!';
     const statusMessage = document.createElement('div');
     const inputs = formId.querySelectorAll('input');
-    // statusMessage.style.cssText = `font-size: 2rem;color: green;`;
-    // statusMessage.className = 'statusMessage';
     const removeMessage = () => {
         statusMessage.remove();
     };
@@ -33,12 +30,8 @@ const sendForm = formId => {
 
         formId.append(statusMessage);
         statusMessage.className = 'statusMessage';
-        // statusMessage.textContent = loadMessage;
         const formData = new FormData(formId);
         const body = {};
-        // for (const val of formData.entries()) {
-        //     body[val[0]] = val[1];
-        // }
         formData.forEach((val, key) => {
             body[key] = val;
         });

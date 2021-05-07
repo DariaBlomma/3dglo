@@ -4,10 +4,9 @@ const toggleMenu = () => {
     let showInterval;
     let count = 0;
     const menuShow = () => {
-        // console.log('in menu show');
         menuBlock.style.left = 0;
         showInterval = requestAnimationFrame(menuShow);
-        count += 2;
+        count += 6;
         if (count < 101) {
             menuBlock.style.transform = `translate(${count}%)`; // 100%
         } else {
@@ -19,10 +18,9 @@ const toggleMenu = () => {
     let hideInterval;
     let countHide = 0;
     const menuHide = () => {
-        // console.log('in menu hide');
         hideInterval = requestAnimationFrame(menuHide);
         const width = menuBlock.clientWidth;
-        countHide += 5;
+        countHide += 15;
         if (countHide < width) {
             menuBlock.style.left = `${countHide}px`;
         } else {
@@ -32,7 +30,6 @@ const toggleMenu = () => {
     };
 
     const handlerMenu = () => {
-        // console.log('in handler menu');
         countHide = 0;
         count = 0;
         menuBlock.style.left = 0;
@@ -42,18 +39,13 @@ const toggleMenu = () => {
         } else {
             menuBlock.style.transform = `translate(-100%)`;
         }
-
-        // menuBlock.classList.toggle('active-menu');
     };
 
     document.body.addEventListener('click', event => {
         let target = event.target;
-        // console.log('target: ', target);
         if (target.closest('.menu')) {
-            console.log('menu click');
             if (window.innerWidth > 768) {
                 menuBlock.classList.add('shown');
-                console.log('will show menu');
                 menuShow();
             } else {
                 handlerMenu();
