@@ -6,6 +6,7 @@ import toggleMenu from './modules/toggleMenu';
 import scroll from './modules/scroll';
 import tabs from './modules/tabs';
 import slider from './modules/slider';
+// import sliderCarousel from './modules/sliderCarousel';
 import changePhotos from './modules/changePhotos';
 import validation from './modules/validation';
 import calculator from './modules/calculator';
@@ -25,6 +26,9 @@ tabs();
 
 //  slider
 slider();
+
+// // //  sliderCarousel
+// sliderCarousel();
 
 // team photos
 changePhotos();
