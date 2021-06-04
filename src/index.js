@@ -11,7 +11,7 @@ import changePhotos from './modules/changePhotos';
 import validation from './modules/validation';
 import calculator from './modules/calculator';
 import sendForm from './modules/sendForm';
-countTimer('01 june 2021');
+countTimer('01 june 2023');
 
 // menu
 toggleMenu();
